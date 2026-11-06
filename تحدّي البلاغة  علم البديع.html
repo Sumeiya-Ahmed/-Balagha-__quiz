@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحدّي البلاغة | علم البديع</title>
+<style>
+:root{--navy:#101b46;--blue:#3659e3;--cyan:#25c7d9;--gold:#ffd166;--pink:#ff6fb1;--green:#25b879;--red:#ef5261;--ink:#17213d;--paper:#f5f7ff}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:radial-gradient(circle at top left,#344ca8 0,transparent 32%),linear-gradient(135deg,#0c1438,#192b69 60%,#321c64);color:white;min-height:100vh}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1400px;margin:auto;padding:22px}
+header{text-align:center;padding:16px 10px 24px}
+.kicker{display:inline-block;background:#ffffff1c;border:1px solid #ffffff35;border-radius:999px;padding:7px 18px;color:#b9f6ff;font-weight:800}
+h1{font-size:clamp(2.2rem,5vw,4.4rem);margin:10px 0 0;line-height:1.2;text-shadow:0 5px 20px #0004}
+header p{font-size:clamp(1rem,2vw,1.3rem);color:#e2e8ff;margin:12px auto;max-width:800px}
+.topbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 22px}
+.pill{border:1px solid #ffffff35;background:#ffffff12;padding:9px 15px;border-radius:12px;font-weight:800}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+.panel{background:#ffffff0f;border:1px solid #ffffff25;border-radius:22px;padding:18px;box-shadow:0 18px 50px #0002}
+.panel h2{margin:0 0 14px;font-size:1.5rem}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.category{background:#ffffff18;border:1px solid #ffffff24;border-radius:14px;padding:12px 8px;text-align:center;font-weight:900;min-height:74px;display:grid;place-items:center;font-size:1.05rem}
+.qbtn{background:linear-gradient(135deg,#294de0,#6739c7);border:2px solid #7a8bff;color:#fff;border-radius:14px;min-height:78px;font-size:1.7rem;font-weight:1000;transition:.18s;box-shadow:0 5px 0 #111b55}
+.qbtn:hover:not(:disabled){transform:translateY(-3px);filter:brightness(1.15)}
+.qbtn:disabled{background:#ffffff12;color:#9da9d5;border-color:#ffffff12;box-shadow:none;cursor:default;text-decoration:line-through;opacity:.7}
+.teams{display:grid;gap:8px}
+.team{display:flex;align-items:center;gap:8px;background:#ffffff12;border:2px solid transparent;border-radius:12px;padding:10px}
+.team.active{border-color:var(--gold);background:#ffd16620;box-shadow:0 0 0 2px #ffd16622}
+.team button{border:0;color:white;background:transparent;text-align:right;flex:1;font-weight:900;padding:4px}
+.team .score{font-weight:1000;color:var(--gold);font-size:1.15rem;min-width:42px;text-align:left}
+.team .edit{font-size:.8rem;color:#dce5ff;border:1px solid #ffffff30;border-radius:7px;padding:4px 6px}
+.hint{font-size:.9rem;color:#dce4ff;margin:12px 0 0;line-height:1.7}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.control{border:0;border-radius:11px;padding:10px 13px;font-weight:900;background:#fff;color:var(--navy)}
+.control.secondary{background:#ffffff1a;color:white;border:1px solid #ffffff35}
+.control.danger{background:#ef5261;color:white}
+.overlay{position:fixed;inset:0;background:#070d28dd;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+.overlay.show{display:flex}
+.modal{width:min(900px,100%);max-height:92vh;overflow:auto;background:linear-gradient(145deg,#fff,#eef2ff);color:var(--ink);border-radius:26px;padding:clamp(20px,4vw,42px);box-shadow:0 30px 100px #0007;text-align:center;position:relative}
+.modal .round{color:#3659e3;font-weight:1000;font-size:1rem}
+.modal h2{font-size:clamp(1.5rem,3vw,2.5rem);margin:12px 0 25px;line-height:1.5}
+.answer{display:none;background:#dcfce9;border:2px solid #25b879;border-radius:16px;padding:18px;margin:18px 0;font-size:1.2rem;font-weight:800;line-height:1.8}
+.answer.show{display:block}
+.modal-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px}
+.bigbtn{border:0;border-radius:13px;padding:13px 20px;font-weight:1000;background:var(--blue);color:white;box-shadow:0 4px 0 #22379a}
+.bigbtn.green{background:var(--green);box-shadow:0 4px 0 #08784c}
+.bigbtn.red{background:var(--red);box-shadow:0 4px 0 #a9293a}
+.bigbtn.gold{background:#f4b82b;color:#2d2344;box-shadow:0 4px 0 #ba8310}
+.close{position:absolute;top:12px;left:14px;border:0;background:#e5e7eb;border-radius:50%;width:42px;height:42px;font-size:1.3rem;font-weight:900}
+.winner{display:none;text-align:center;background:#ffd166;color:#2a2050;padding:14px;border-radius:15px;font-weight:1000;margin-top:12px}
+footer{text-align:center;color:#d4dcff;padding:24px 10px}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.teams{grid-template-columns:repeat(3,minmax(0,1fr))}.board{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:560px){.wrap{padding:12px}.panel{padding:12px}.teams{grid-template-columns:repeat(2,minmax(0,1fr))}.board{gap:6px}.category{font-size:.82rem;padding:8px 3px;min-height:64px}.qbtn{min-height:58px;font-size:1.3rem}.team{padding:7px;gap:4px}.team .edit{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kicker">🏆 منافسة الصف • ٩ مجموعات</div>
+  <h1>تحدّي البلاغة ✨</h1>
+  <p>علم البديع والتحسينات البلاغية — اختاروا السؤال، ناقشوا الإجابة، واجمعوا النقاط!</p>
+  <div class="topbar">
+    <div class="pill">⚖️ الطباق</div><div class="pill">🔄 المقابلة</div><div class="pill">🎵 السجع</div><div class="pill">🪶 الجناس</div>
+  </div>
+</header>
+<div class="layout">
+ <main class="panel">
+   <h2>🎯 لوحة الأسئلة</h2>
+   <div class="board" id="board"></div>
+   <div class="controls">
+     <button class="control secondary" onclick="resetBoard()">🔄 إعادة الأسئلة</button>
+     <button class="control secondary" onclick="showWinner()">🏆 إعلان المتصدّرة</button>
+     <button class="control danger" onclick="resetScores()">تصفير النقاط</button>
+   </div>
+   <p class="hint">طريقة اللعب: اختاري المجموعة أولاً من لوحة المجموعات، ثم اضغطي على سؤال. بعد النقاش اضغطي «إجابة صحيحة» لمنح النقاط، أو «إجابة غير صحيحة» للانتقال دون نقاط. يمكن للمجموعة الأخرى أن تسرق الإجابة إذا أردتِ.</p>
+ </main>
+ <aside class="panel">
+   <h2>👑 لوحة المجموعات</h2>
+   <div class="teams" id="teams"></div>
+   <div class="winner" id="winner"></div>
+   <div class="controls"><button class="control" onclick="renameTeams()">✏️ تغيير أسماء المجموعات</button></div>
+   <p class="hint">اضغطي اسم المجموعة لتحديد دورها. المجموعة النشطة تظهر بإطار ذهبي.</p>
+ </aside>
+</div>
+<footer>أستاذتكِ سميّة • تعلّموا، ناقشوا، وتنافسوا بروح الفريق 🌟</footer>
+</div>
+<div class="overlay" id="overlay">
+ <div class="modal">
+   <button class="close" onclick="closeQuestion()" aria-label="إغلاق">×</button>
+   <div class="round" id="qmeta"></div>
+   <h2 id="qtext"></h2>
+   <div class="answer" id="answer"></div>
+   <div class="modal-actions" id="before">
+     <button class="bigbtn gold" onclick="reveal()">👀 إظهار الإجابة</button>
+   </div>
+   <div class="modal-actions" id="after" style="display:none">
+     <button class="bigbtn green" onclick="award(true)">✅ إجابة صحيحة (+النقاط)</button>
+     <button class="bigbtn red" onclick="award(false)">❌ غير صحيحة</button>
+     <button class="bigbtn" onclick="steal()">⚡ سرقة السؤال لمجموعة أخرى</button>
+   </div>
+   <div class="modal-actions"><button class="bigbtn" onclick="closeQuestion()">العودة إلى اللوحة</button></div>
+ </div>
+</div>
+<script>
+const categories=[
+ {name:"⚖️ الطباق",qs:[
+  ["ما الفن البلاغي الذي يجمع بين كلمة وضدها؟","الطباق.", 50],
+  ["الصِّدق والكذب: أيّ فن بلاغي يمثّلان؟","الطباق؛ لأنهما ضدّان.", 100],
+  ["ما الفرق بين طباق الإيجاب وطباق السلب؟","الإيجاب: الطرفان مثبتان بلا أداة نفي. السلب: أحد الطرفين مثبت والآخر منفي.", 150],
+  ["«يَعْلَمُونَ ولا يَعْلَمُونَ» من أي نوع؟","طباق السلب؛ لأن أحد الطرفين مثبت والآخر منفي.", 200],
+  ["الحياة والموت: هل هذا طباق أم سجع؟ ولماذا؟","طباق؛ لأن الحياة والموت ضدّان.", 250],
+  ["في عبارة «يضحك قليلًا ويبكي كثيرًا»، حدّدي الكلمتين المتضادتين.","يضحك ويبكي؛ وهما ضدّان، ففيهما طباق.", 300],
+  ["ما نوع الطباق في «حضر ولم يحضر»؟","طباق السلب؛ لأن الفعل جاء مثبتًا ثم منفيًّا.", 350],
+  ["هل «ليل ونهار» مثال على الطباق؟ علّلي.","نعم؛ لأن الليل والنهار متضادّان.", 400],
+  ["أكملي: طباق الإيجاب يكون بين لفظين ...","متضادّين من غير أن يكون أحدهما منفيًّا.", 450],
+  ["تحدٍّ: اشرحي كيف تميّزين الطباق من المقابلة.","الطباق يكون بين معنى وضدّه غالبًا، أما المقابلة فتجمع معاني متعددة ثم أضدادها بالترتيب.", 500]
+ ]},
+ {name:"🔄 المقابلة",qs:[
+  ["ما المقابلة بطريقة سهلة؟","ذكر معنيين أو أكثر ثم الإتيان بما يقابلها من الأضداد بالترتيب.", 50],
+  ["ما العلامة التي تساعدك على تمييز المقابلة؟","وجود عدة معانٍ ثم عدة أضداد تقابلها مع مراعاة الترتيب.", 100],
+  ["في خريطة الدرس: الصدق، البر، الجنة؛ ويقابلها الكذب، الفجور، النار. ما الفن؟","المقابلة؛ لأن عدة معانٍ قابلتها أضدادها بالترتيب.", 150],
+  ["أيّهما يعتمد على الترتيب بصورة مهمة: الطباق أم المقابلة؟","المقابلة.", 200],
+  ["اذكري فرقين بين الطباق والمقابلة.","الطباق غالبًا بين لفظين متضادين، أما المقابلة ففيها معانٍ متعددة وأضدادها، والترتيب مهم فيها.", 250],
+  ["إذا ذكر المتكلم «النجاح والفرح» ثم «الفشل والحزن»، فما الفن الأقرب؟","المقابلة؛ لأن معنيين قوبلا بضدّيهما بالترتيب.", 300],
+  ["لماذا لا يكفي وجود كلمة وضدها وحدهما للحكم بأن المثال مقابلة؟","لأن المقابلة تتضمن معاني متعددة تقابلها أضدادها، لا مجرد تضاد واحد.", 350],
+  ["في المقابلة، ماذا يأتي بعد ذكر المعاني الأولى؟","تأتي المعاني التي تقابلها وتضادّها، مع مراعاة الترتيب.", 400],
+  ["تحدّي التصنيف: «الليل والنهار» وحدهما؛ هل هو طباق أم مقابلة؟","طباق؛ لأن المثال يشتمل على ضدّين فقط.", 450],
+  ["اصنعي مثالًا من عندك للمقابلة يتضمن معنيين وضدّيهما.","مثال مقبول: يكرم المجتهد ويهمل الكسول؛ ويُقبل أي مثال صحيح فيه معانٍ وأضدادها بالترتيب.", 500]
+ ]},
+ {name:"🎵 السجع",qs:[
+  ["ما السجع؟","توافق أواخر الفقرات في الحرف أو الصوت.", 50],
+  ["في المثال «العلم نور، والجهل غرور»، ما الكلمتان المتوافقتان في النهاية؟","نور وغرور.", 100],
+  ["هل نركّز في السجع على نهاية الفقرات أم على تضاد المعاني؟","نركّز على توافق أواخر الفقرات في الصوت.", 150],
+  ["ما الحيلة المقترحة في الدرس للتعرّف على السجع؟","قراءة الجملة بصوت مرتفع وملاحظة توافق نهاية الفقرات صوتيًا.", 200],
+  ["ما الفرق بين السجع والجناس؟","السجع يلاحظ توافق أواخر الفقرات، والجناس تشابه لفظين مع اختلاف المعنى.", 250],
+  ["إذا تشابهت نهايتا فقرتين في الصوت، فما الفن الذي نبحث عنه؟","السجع.", 300],
+  ["هل يعتمد السجع أساسًا على تضاد الكلمات أم على توافق النهايات؟","على توافق النهايات في الصوت.", 350],
+  ["في «من جدّ وجد، ومن زرع حصد»، ما الذي ينبغي فحصه للتعرّف على السجع؟","فحص توافق أواخر الفقرات أو العبارات في الصوت.", 400],
+  ["لماذا يُقرأ المثال بصوت مرتفع عند البحث عن السجع؟","لأن السجع يُلاحظ من خلال توافق الأصوات في أواخر الفقرات.", 450],
+  ["تحدٍّ: اشرحي الفرق بين الطباق والسجع في جملة واحدة.","الطباق يجمع بين معنيين متضادين، والسجع يعتمد على توافق أواخر الفقرات صوتيًا.", 500]
+ ]},
+ {name:"🪶 الجناس",qs:[
+  ["ما الجناس؟","تشابه لفظين في النطق أو الصورة مع اختلافهما في المعنى.", 50],
+  ["ما نوعا الجناس المذكوران في الدرس؟","الجناس التام والجناس غير التام (الناقص).", 100],
+  ["ما الأمور الأربعة التي يتفق فيها اللفظان في الجناس التام بحسب الدرس؟","نوع الحروف، وشكلها، وعددها، وترتيبها.", 150],
+  ["«السَّاعة» بمعنى القيامة و«ساعة» بمعنى مدة من الزمن: ما الفن؟","الجناس التام، كما ورد في الدرس.", 200],
+  ["ما المقصود بالجناس غير التام (الناقص)؟","أن يختلف اللفظان في واحد أو أكثر من الأمور التي يراعيها الجناس التام.", 250],
+  ["في الجناس، هل يتفق اللفظان في المعنى أم يختلفان؟","يختلفان في المعنى، مع وجود تشابه لفظي بينهما.", 300],
+  ["إذا اتفق اللفظان في نوع الحروف وشكلها وعددها وترتيبها واختلف معناهما، فما نوع الجناس؟","الجناس التام.", 350],
+  ["أيّهما أوسع اختلافًا عن الآخر: الجناس التام أم غير التام؟","الجناس غير التام؛ إذ يختلف اللفظان في واحد أو أكثر من شروط التمام.", 400],
+  ["ما الشرط الأساسي الذي يمنعنا من اعتبار مجرد تكرار الكلمة بالمعنى نفسه جناسًا؟","أن يكون اللفظان مختلفين في المعنى.", 450],
+  ["تحدٍّ: اذكري الفرق بين الجناس التام وغير التام بحسب شروط الدرس.","التام تتفق ألفاظه في نوع الحروف وشكلها وعددها وترتيبها مع اختلاف المعنى؛ وغير التام يختلف في واحد أو أكثر منها.", 500]
+ ]}
+];
+let teams=Array.from({length:9},(_,i)=>({name:`المجموعة ${i+1}`,score:0}));
+let activeTeam=0, current=null, used=new Set(), questionLocked=false;
+function renderTeams(){
+ const el=document.getElementById("teams");el.innerHTML="";
+ teams.forEach((t,i)=>{
+  const row=document.createElement("div");row.className="team"+(i===activeTeam?" active":"");
+  const b=document.createElement("button");b.textContent=t.name;b.onclick=()=>{activeTeam=i;renderTeams()};
+  const score=document.createElement("span");score.className="score";score.textContent=t.score;
+  const edit=document.createElement("button");edit.className="edit";edit.textContent="✎";edit.title="تغيير الاسم";edit.onclick=()=>{let n=prompt("اسم المجموعة:",t.name);if(n&&n.trim()){t.name=n.trim();renderTeams()}};
+  row.append(b,score,edit);el.appendChild(row);
+ });
+}
+function renderBoard(){
+ const el=document.getElementById("board");el.innerHTML="";
+ categories.forEach((c,ci)=>{
+  const head=document.createElement("div");head.className="category";head.textContent=c.name;el.appendChild(head);
+ });
+ for(let qi=0;qi<10;qi++){
+  categories.forEach((c,ci)=>{
+   const key=`${ci}-${qi}`;const b=document.createElement("button");b.className="qbtn";b.textContent=c.qs[qi][2];
+   b.disabled=used.has(key);b.title=`${c.name} - ${c.qs[qi][2]} نقطة`;
+   b.onclick=()=>openQuestion(ci,qi);el.appendChild(b);
+  });
+ }
+}
+function openQuestion(ci,qi){
+ current={ci,qi,key:`${ci}-${qi}`,q:categories[ci].qs[qi]};questionLocked=false;
+ document.getElementById("qmeta").textContent=`${categories[ci].name} • ${current.q[2]} نقطة • الدور: ${teams[activeTeam].name}`;
+ document.getElementById("qtext").textContent=current.q[0];
+ document.getElementById("answer").textContent="الإجابة: "+current.q[1];
+ document.getElementById("answer").classList.remove("show");
+ document.getElementById("before").style.display="flex";document.getElementById("after").style.display="none";
+ document.getElementById("overlay").classList.add("show");
+}
+function reveal(){document.getElementById("answer").classList.add("show");document.getElementById("before").style.display="none";document.getElementById("after").style.display="flex"}
+function award(correct){
+ if(!current||questionLocked)return;questionLocked=true;
+ if(correct)teams[activeTeam].score+=current.q[2];
+ used.add(current.key);renderTeams();renderBoard();
+ document.getElementById("qmeta").textContent=correct?`أحسنتِ يا ${teams[activeTeam].name}! +${current.q[2]} نقطة 🎉`:"تم إغلاق السؤال دون نقاط.";
+ document.getElementById("after").style.display="none";
+ const b=document.createElement("button");b.className="bigbtn";b.textContent="السؤال التالي / العودة للوحة";b.onclick=closeQuestion;
+ document.querySelector(".modal-actions:last-child").replaceChildren(b);
+}
+function steal(){
+ if(!current||questionLocked)return;
+ let choices=teams.map((t,i)=>`${i+1}. ${t.name}`).filter((x,i)=>i!==activeTeam).join("\n");
+ let choice=prompt("اكتبي رقم المجموعة التي ستجرب سرقة السؤال:\n"+choices);
+ let n=Number(choice)-1;
+ if(Number.isInteger(n)&&n>=0&&n<teams.length&&n!==activeTeam){
+  activeTeam=n;renderTeams();document.getElementById("qmeta").textContent=`فرصة سرقة السؤال • ${teams[n].name} • ${current.q[2]} نقطة`;
+  document.getElementById("after").style.display="flex";
+ }
+}
+function closeQuestion(){
+ document.getElementById("overlay").classList.remove("show");
+ document.querySelector(".modal-actions:last-child").innerHTML='<button class="bigbtn" onclick="closeQuestion()">العودة إلى اللوحة</button>';
+ renderTeams();
+}
+function resetBoard(){if(confirm("إعادة جميع الأسئلة إلى اللوحة؟")){used.clear();renderBoard()}}
+function resetScores(){if(confirm("هل تريدين تصفير نقاط المجموعات التسع؟")){teams.forEach(t=>t.score=0);renderTeams();document.getElementById("winner").style.display="none"}}
+function renameTeams(){teams.forEach((t,i)=>{let n=prompt(`اسم المجموعة ${i+1}:`,t.name);if(n&&n.trim())t.name=n.trim()});renderTeams()}
+function showWinner(){
+ const max=Math.max(...teams.map(t=>t.score));const winners=teams.filter(t=>t.score===max);
+ const el=document.getElementById("winner");el.style.display="block";
+ el.textContent=max===0?"لم تُسجَّل نقاط بعد — ابدؤوا التحدّي!":`🏆 المتصدّرة${winners.length>1?"ات":""}: ${winners.map(t=>t.name).join(" و ")} — ${max} نقطة!`;
+}
+renderTeams();renderBoard();
+</script>
+</body>
+</html>
